@@ -1,22 +1,16 @@
-"""Application configuration settings."""
-
 import os
 
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
-    """Base configuration for the Cloud Disaster Recovery Management Portal."""
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'super-secret-enterprise-key-2026'
 
-    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-
-    SECRET_KEY = os.environ.get("SECRET_KEY", "change-this-in-production")
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        "DATABASE_URL", f"sqlite:///{os.path.join(BASE_DIR, 'cloud_dr_portal.db')}"
-    )
+    # FIX: We removed 'instance' from this line so it builds the DB safely in the main folder
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
+        'sqlite:///' + os.path.join(BASE_DIR, 'cloud_dr.db')
+    
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    UPLOAD_FOLDER = os.path.join(BASE_DIR, 'backups')
 
-    UPLOAD_FOLDER = os.path.join(BASE_DIR, "backups")
-    MAX_CONTENT_LENGTH = 100 * 1024 * 1024  # 100 MB
-    ALLOWED_EXTENSIONS = {"zip", "tar", "gz", "sql", "bak", "7z"}
-
-    ADMIN_DEFAULT_USERNAME = os.environ.get("ADMIN_DEFAULT_USERNAME", "admin")
-    ADMIN_DEFAULT_PASSWORD = os.environ.get("ADMIN_DEFAULT_PASSWORD", "admin123")
+    ADMIN_DEFAULT_USERNAME = 'admin.sys'
+    ADMIN_DEFAULT_PASSWORD = 'SuperSecretBank123!'
